@@ -185,3 +185,39 @@ function Score() {
 	s=0;
 	}
 }
+
+function drawHealth() {
+    ctx.font = "30px Arial";
+    ctx.fillStyle = "#ffffff";
+    ctx.fillText("health:" + player.gethealth()+"%", 800, 60);
+	if(player.gethealth()<=0){
+		ctx.clearRect(0,0,canvas.width,canvas.height);
+		mousedown = false;
+		openMenu = true;
+		ship.x = canvas.width/2 - 75;
+		ship.y = canvas.height - 140;
+		player.health= 100;
+		if(score > bestScore)
+			bestScore = score;
+		scoreNow = score;
+		score = 0;
+		version = 1;
+		shield = false;
+		player.shield = false;
+		fire = false;
+		control = 0;
+		border = 1;
+		bossfightStart = 50;
+		bossfight = 0;
+		s2=800;
+		s6 = 0;
+		clean = 0;
+		bullets.splice(0, bullets.length);
+        obstacles.splice(0, obstacles.length);
+		enemy.splice(0, enemy.length);
+		if( bossfight == 1){
+		   boooss.live = 0;
+		}		
+	}	
+}
+
