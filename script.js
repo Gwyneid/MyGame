@@ -154,3 +154,34 @@ function getRandomInt(min, max) {
 function getRandomFloat(min, max) {
   return Math.random() * (max - min) + min;
 }
+
+function Menu() {
+	ctx.beginPath();
+	ctx.drawImage(back, 0, 0, canvas.width, canvas.height);
+    ctx.font = "50px Arial";
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "40px Arial";
+	if(version==0){
+       ctx.fillText("Нажмите  пробел чтобы играть с клавиатуры", 140, 60);
+	   ctx.fillText("your best score: "+ bestScore, 350, 300);
+       ctx.fillText("Или нажмите на экран чтобы играть c телефона", 20, 575);
+	}
+	if(version == 1){
+	   ctx.fillText("Нажмите пробел чтобы выйти в меню", 10, 60);
+	   ctx.fillText("или кликните по экрану", 520, 110);
+	   ctx.fillText("your lose", 380, 250);
+	   ctx.fillText("your score: "+ scoreNow, 350, 325);
+	}
+	ctx.closePath();
+}
+
+function Score() {
+    ctx.font = "30px Arial";
+    ctx.fillStyle = "#ffffff";
+    ctx.fillText("Score:" +score, 30, 60);
+	s+=1;
+	if(s % 100 == 0){
+	score = score + 1;
+	s=0;
+	}
+}
