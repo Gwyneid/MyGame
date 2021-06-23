@@ -334,3 +334,86 @@ class Enemy{
 	  }
     }
 }
+class Boss{
+	constructor(){
+	this.live = 10;
+	this.x = canvas.width/2-230;
+	this.y = getRandomInt(-50,-100);
+	this.dx = 5;
+	this.dy = 1;
+	this.route = getRandomInt(0, 2);
+	this.border = 100;
+	this.s = 0;
+	this.j = [];
+	}
+	drawBoss(){
+		if(this.live != 0){
+			if(this.y < this.border)
+				this.y += this.dy;
+			if(this.route == 0){
+			    this.x += this.dx;
+				if(this.x+460 >= 1000)
+					this.route = 1;
+			}
+			if(this.route == 1){
+			    this.x -= this.dx;
+				if(this.x <= 0)
+					this.route = 0;
+			}
+	    ctx.drawImage(boss, this.x , this.y , 460, 200);	
+		}
+		for(let i = 0; i < bullets.length; i++){ 
+			if(bullets[i].x >= this.x-60 && bullets[i].x < this.x + 410 && bullets[i].y - this.y <= 130)
+				if( bullets[i].y > this.y + bulletHeight )
+			      if( bullets[i].hit == 1 && this.live != 0){
+				this.live -=1;
+				bullets[i].hit=0;
+			}
+		}
+		if(this.s == 0 && this.y >= this.border){
+		    this.j[0] = new BulletEnemy(this.x-20 ,this.y + 30,1);
+			this.j[1] = new BulletEnemy(this.x+140 ,this.y + 100,1);
+			this.j[2] = new BulletEnemy(this.x+300 ,this.y + 100,1);
+		    this.s = 1;
+		}
+		if(this.s==1){
+			for(let i=0;i<3;i++){
+			this.j[i].drawBulletUFO();
+			this.j[i].damageBulletUFO();
+			}
+		if(this.j[2].y > canvas.height+150){
+			this.s = 0;
+		}
+	}
+}
+}
+
+class BulletEnemy {
+    constructor(a,b,c){
+	  this.boss = c;
+	  this.bulletWidth = 35;
+      this.bulletHeight = 65;
+	  this.hit = 1;
+      this.x = a;
+	  this.dy = 10;
+      this.y = b+10;
+	  if(control==2)
+		  this.dy=6;
+    }
+   drawBulletUFO(){
+      this.y += this.dy;
+	  if(this.hit == 1)
+      ctx.drawImage(laser2,this.x + 64, this.y, this.bulletWidth, this.bulletHeight);
+   }
+   damageBulletUFO(){
+	   if(this.hit==1)
+	   if(this.x >= ship.coordinate_x()-70&& this.x  <= ship.coordinate_x() + 70 && Math.abs(ship.coordinate_y()-this.y) <= 50){
+	   player.hitEnemyBullet();
+	   if(player.shield == false){
+	       player.shield = true;
+	       shield = true;
+	   }
+	   this.hit = 0;
+	   }
+   }
+}
