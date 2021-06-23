@@ -275,6 +275,62 @@ class Obstacle{
 	            player.shield = true;
 	            shield = true;
 	           }
-			}
+		}
 	}
+}
+const enemy = [];
+class Enemy{
+	constructor(){
+	this.live = 2;
+	this.x = getRandomInt(100, 900);
+	this.y = getRandomInt(-50,-100);
+	this.dx = getRandomInt(3, 8);
+	this.dy = getRandomInt(1.8, 3);
+	this.quantity = getRandomInt(0, 4);
+	this.route = getRandomInt(0, 2);
+	this.j;
+	this.s=0;
+	this.border = piece * this.quantity;
+	if(control==1)
+		this.live=4;
+	enemy.push(this);
+	}
+	drawUFO(){
+		if(this.live != 0){
+			if(this.y + this.dy > this.border && this.y != this.border)
+				this.y = this.border;
+			if(this.y + this.dy < this.border)
+				this.y += this.dy;
+			if(this.route == 0){
+			    this.x += this.dx;
+				if(this.x > 850)
+					this.route = 1;
+			}
+			if(this.route == 1){
+			    this.x -= this.dx;
+				if(this.x <= 0)
+					this.route = 0;
+			}
+	    ctx.drawImage(UFO, this.x , this.y , 150, 150);	
+		}
+		for(let i = 0; i < bullets.length; i++){ 
+			if(bullets[i].x > this.x - 70 && bullets[i].x < this.x + 85 && (bullets[i].y- this.y) <= 100)
+				if( bullets[i].y > this.y + bulletHeight )
+			      if( bullets[i].hit == 1 && this.live != 0){
+				this.live -=1;
+				bullets[i].hit=0;
+			}
+		}
+		if(this.s == 0 && this.y >= this.border&& this.live!=0){
+		    this.j= new BulletEnemy(this.x-5 ,this.y + 75,0);
+		    this.s = 1;
+		}
+		if(this.s==1){
+			this.j.drawBulletUFO();
+			this.j.damageBulletUFO();
+		if(this.j.y> canvas.height+100){
+			this.s = 0;
+		}
+	  }
+    }
 }
