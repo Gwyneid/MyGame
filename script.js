@@ -3,6 +3,13 @@ var ctx = canvas.getContext("2d");
 canvas.height = window.innerHeight;
 canvas.width = 1000;
 var screenlength = window.innerWidth;
+var screenlength = window.innerWidth;
+var indent = (screenlength-1000)/2;
+var piece = canvas.height/8;
+var x = canvas.width/2 - 75;
+var y = canvas.height-140;
+var dx = 30;
+var dy = 3;
 
 document.addEventListener("mousedown", mouseDown, false);
 document.addEventListener("mouseup", mouseUp, false);
