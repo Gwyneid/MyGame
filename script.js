@@ -221,3 +221,60 @@ function drawHealth() {
 	}	
 }
 
+const bullets = [];
+class Bullet {
+   constructor(){
+	  this.bulletWidth = 16;
+      this.bulletHeight = 50;
+	  this.hit = 1;
+      this.x = ship.coordinate_x();
+      this.y = ship.coordinate_y();
+      bullets.push(this);
+   }
+   drawBulletShip(){
+      this.y -= 2.5;
+	  if(this.hit==1)
+      ctx.drawImage(laser,this.x + 59, this.y - 35, this.bulletWidth, this.bulletHeight);
+      if(this.y < -200)
+		  bullets.splice(this,1);
+	  if(this.y < 0)
+		  this.hit = 0;
+   }
+}
+
+const obstacles = [];
+class Obstacle{
+	constructor(){
+	this.live = 1;
+	this.x = getRandomInt(100, 900);
+	this.y = getRandomInt(-100,-50);
+	this.dx = getRandomFloat(-1.2, 1.2);
+	this.dy = getRandomInt(3, 7);
+	obstacles.push(this);
+	}
+	draw(){
+		this.x += this.dx;
+		this. y += this.dy;
+		if(this.live == 1)
+	    ctx.drawImage(meteorite, this.x , this.y , 100, 100);
+		for(let i = 0; i < bullets.length; i++){ 
+			if(bullets[i].x > this.x - 70 && bullets[i].x < this.x + bulletWidth + 35&& (bullets[i].y- this.y) <= 100)
+				if( bullets[i].y > this.y + bulletHeight )
+			      if( bullets[i].hit == 1 && this.live == 1){
+				this.live = 0;
+				bullets[i].hit=0;
+			}
+		}			
+	}
+	damage(){
+		if(this.x + 100 >= ship.coordinate_x()+30 && this.x  <= ship.coordinate_x() + 90 && Math.abs(ship.coordinate_y()-this.y) <= 90 )
+			if(this.live == 1){
+			player.hit();
+		    this.live=0;
+			if(player.shield == false){
+	            player.shield = true;
+	            shield = true;
+	           }
+			}
+	}
+}
