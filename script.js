@@ -417,3 +417,160 @@ class BulletEnemy {
 	   }
    }
 }
+
+class Player{
+	constructor(){
+        this.health = 100;
+		this.shield = false;
+    }
+	gethealth(){
+		return(this.health);
+	}
+	hit(){
+		if(this.shield === false)
+		 this.health -= 8;
+	}
+	hitEnemyBullet(){
+		if(this.shield === false)
+		 this.health -= 5;
+	}
+}
+
+player = new Player();
+
+class Ship{
+	x = canvas.width/2 - 75;
+	y = canvas.height - 140;
+	dx = 5;
+	dy = 5;
+	shipMove(){
+	if(control==2){
+	if(up){
+		if(this.y - this.dy >= 0)
+		this.y -= this.dy;
+	}
+	if(right){
+		if(this.x + this.dx < 1000-134)
+		this.x += this.dx;
+	}
+	if(down){
+		if(this.y + this.dy <= canvas.height-134)
+		this.y += this.dy;
+	}
+	if(left){
+		if((this.x - this.dx) > 0)
+		this.x -= this.dx;
+	}
+	}
+	if(control==1 && score>0){
+		if (mousedown){
+                if(clickX > indent + 134/2&& clickX < indent + canvas.width-134/2){
+                    this.x = clickX -indent-134/2;
+                }
+				 if(clickY >0 +134/2 && clickY < canvas.height - 134/2){
+                    this.y = clickY - 134/2;
+                }
+            }
+	}
+	}
+	drawShip(){
+	    ctx.drawImage(spaceship, this.x, this.y, 134, 134);
+	}
+	coordinate_x(){
+		return(this.x);
+	}
+	coordinate_y(){
+		return(this.y);
+	}
+}
+ship = new Ship(); 
+boooss = new Boss();
+function draw(){
+	if(!mousedown){
+		Menu();
+	}
+	if(mousedown && openMenu == true ){
+		if(version == 1){
+			version = 0;
+			mousedown=false;
+		}
+		else{
+		ctx.clearRect(0,0,canvas.width,canvas.height);
+		openMenu = false;
+		}
+	}
+	if(openMenu == false ){
+		s1+=1;
+		s2+=1;
+		ctx.drawImage(space, 0, 0, canvas.width, canvas.height);
+		obstacles.forEach(obstacle => obstacle.draw());
+		obstacles.forEach(obstacle => obstacle.damage());
+		enemy.forEach(Enemy => Enemy.drawUFO());
+		if(shield == true){
+		ctx.drawImage(Shield, 900, 80, 80, 80);
+		   if(s5 < 300)
+			s5 += 1;
+		if(s5 == 300){
+			s5=0;
+		    shield = false;
+			player.shield = false;
+		}
+		}
+		if(bossfight==0 && score > border){
+		if( s2 > 800 && s4 == 1) {
+		   k = getRandomInt(1,5);
+		   for(let i = 0 ;i < k; i++){
+                new Enemy();
+		   }
+		   k = getRandomInt(3,9);
+		   for(let i = 0 ;i < k; i++){
+               new Obstacle();
+		   }
+		   s2 = 0;
+		   s4 = 0;
+       }
+	   for(let i=0; i < obstacles.length;i++)
+		   if(obstacles[i].y < canvas.height+100)
+			   s3 = 0;
+		if(s3 == 1){
+			obstacles.splice(0, obstacles.length);
+			s4 = 1;
+		}
+		}
+		s3 = 1;
+		if(bossfight==1)
+			boooss.drawBoss();
+		Score();
+		drawHealth();
+		ship.drawShip();
+		ship.shipMove();
+		bullets.forEach(bullet => bullet.drawBulletShip());
+		if(fire && s1 > 50) {
+           new Bullet();
+		   s1 = 0;
+       }
+	   if(score == bossfightStart && s6==0){
+		   bossfight = 1;
+		   boooss = new Boss();
+		   border2 = score+2;
+		   s6 = 1;
+	   }
+	   if( bossfight == 1){
+		   if(clean==0){
+		       bullets.splice(0, bullets.length);
+               obstacles.splice(0, obstacles.length);
+		       enemy.splice(0, enemy.length);
+			   clean = 1;
+		   }
+		if(boooss.live == 0 && boooss.s == 0 ){
+			border = score + 1;
+			bossfight = 0;
+			bossfightStart = score + 50;
+			s6 = 0;
+			clean = 0;
+	   }
+	}
+}
+}
+
+setInterval(draw, 10);
