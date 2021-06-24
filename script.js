@@ -428,11 +428,11 @@ class Player{
 	}
 	hit(){
 		if(this.shield === false)
-		 this.health -= 8;
+		 this.health -= 20;
 	}
 	hitEnemyBullet(){
 		if(this.shield === false)
-		 this.health -= 5;
+		 this.health -= 15;
 	}
 }
 
